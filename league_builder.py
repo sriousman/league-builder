@@ -1,20 +1,28 @@
-###  PROJECT 1: LEAGUE BUILDER  ##############################################
+# PROJECT 1: LEAGUE BUILDER
 #    AUTHOR: srious                                                          #
 #    DESCRIPTION:                                                            #
 #        Program requires a file, 'soccer_players.csv', to read player       #
 #        profiles, build a league for three teams, and generate letters to   #
 #        each player's guardian(s) with league instructions in a separate    #
 #        file.                                                               #
-##############################################################################
+###
 
-import csv # Module for reading and writing to .csv files
+import csv  # Module for reading and writing to .csv files
 
 # VARIABLES #
-sharks = [{'TeamName':'Sharks','First Practice':'3:00pm, Thursday March 9th.'}]
-dragons =[{'TeamName':'Dragons','First Practice':'3:00pm, Wednesday March 8th.'}]
-raptors =[{'TeamName':'Raptors','First Practice':'3:00pm, Wednesday March 8th.'}]
-teams = [sharks,dragons,raptors]
-letter_text = "Dear {},\n Congratulations!\n\n Your child, {}, has been drafted to the {}.\n\nWe will be having our first practice at {}\n\n Thanks, Greg"
+sharks = [{
+    'TeamName': 'Sharks', 'First Practice': '3:00pm, Thursday March 9th.'}]
+dragons = [{
+    'TeamName': 'Dragons', 'First Practice': '3:00pm, Wednesday March 8th.'}]
+raptors = [{
+    'TeamName': 'Raptors', 'First Practice': '3:00pm, Wednesday March 8th.'}]
+
+teams = [sharks, dragons, raptors]
+
+letter_text = "Dear {},\n Congratulations!\n\n Your child, {}, has been" +
+'drafted to the {}.\n\nWe will be having our first practice at {}\n\n' +
+"Thanks, Greg"
+
 
 # Loop through each player of the team passed.
 # Create a player_name.txt file and write the
@@ -26,11 +34,12 @@ def write_letters(team):
     for player in team[1:]:
         filename = '_'.join(player['Name'].lower().split())
 
-        file = open(filename + '.txt','a')
-        file.write(letter_text.format(player['Guardian Name(s)'],
-                                        player['Name'],
-                                        team_name,
-                                        first_practice))
+        file = open(filename + '.txt', 'a')
+        file.write(letter_text.format(
+            player['Guardian Name(s)'],
+            player['Name'],
+            team_name,
+            first_practice))
 
 # Prevent from running when loaded. Won't run unless main execution thread
 if __name__ == "__main__":
@@ -42,13 +51,17 @@ if __name__ == "__main__":
         playerreader = csv.DictReader(csvfile, delimiter=',')
         players = list(playerreader)
 
-        xp_players = [player for player in players if player['Soccer Experience'] =='YES' ]
-        no_xp_players = [player for player in players if player['Soccer Experience'] =='NO' ]
+        xp_players = [player for player in players if player[
+                                                'Soccer Experience'] == 'YES']
+        no_xp_players = [player for player in players if player[
+                                                'Soccer Experience'] == 'NO']
 
+        # While xp_players still exist, assign one by one to each team
+        # Like on the playground
         while xp_players:
             for team in teams:
                 team.append(xp_players.pop())
-
+        # Again with the remaining players without experience
         while no_xp_players:
             for team in teams:
                 team.append(no_xp_players.pop())
@@ -61,7 +74,7 @@ if __name__ == "__main__":
             write_letters(team)
             teamfile.write("\n"+team[0]['TeamName'])
             for player in team[1:]:
-                teamfile.write('{}, {}, {}\n'.format(player['Name'],
-                                        player['Soccer Experience'],
-                                        player['Guardian Name(s)'])
-                                        )
+                teamfile.write('{}, {}, {}\n'.format(
+                                            player['Name'],
+                                            player['Soccer Experience'],
+                                            player['Guardian Name(s)']))
